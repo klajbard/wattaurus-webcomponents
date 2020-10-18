@@ -1,2 +1,2 @@
-import '@wui/link-social'
-import '../common/header'
+import '@wui/link-social';
+import '../common/header';

@@ -1,2 +1,2 @@
-import '@wui/link-icon'
-import '../common/header'
+import '@wui/link-icon';
+import '../common/header';

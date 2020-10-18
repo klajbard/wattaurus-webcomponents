@@ -1,1 +1,1 @@
-import '../common/header'
+import '../common/header';

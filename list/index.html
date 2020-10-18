@@ -8,7 +8,7 @@
     <title>WUI - List</title>
   </head>
   <body>
-    <wui-header showBack>List</wui-header>
+    <wui-header showBack component="list">List</wui-header>
     <main class="container">
       <div class="section">
         <h3>Standard list</h3>
@@ -23,12 +23,16 @@
           <wui-list-elem>Elem 2</wui-list-elem>
           <wui-list-elem>Elem 3</wui-list-elem>
         </wui-list>
+        <p><strong>&lt;wui-list style="--wui-list-elem-icon: '🐧';"></strong></p>
         <h3>List with unique marker for each</h3>
         <wui-list>
           <wui-list-elem style="--wui-list-elem-icon: '🌲';">Elem 1</wui-list-elem>
           <wui-list-elem style="--wui-list-elem-icon: '🌳';">Elem 2</wui-list-elem>
           <wui-list-elem style="--wui-list-elem-icon: '🌱';">Elem 3</wui-list-elem>
         </wui-list>
+        <p><strong>&lt;wui-list-elem style="--wui-list-elem-icon: '🌲';"></strong></p>
+        <p><strong>&lt;wui-list-elem style="--wui-list-elem-icon: '🌳';"></strong></p>
+        <p><strong>&lt;wui-list-elem style="--wui-list-elem-icon: '🌱';"></strong></p>
       </div>
     </main>
   </body>

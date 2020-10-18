@@ -8,7 +8,7 @@
     <title>WUI - Navigation Link</title>
   </head>
   <body>
-    <wui-header showBack>Navigation Link</wui-header>
+    <wui-header showBack component="link-nav">Navigation Link</wui-header>
     <main class="container">
       <div class="section">
         <h3>Standard nav link</h3>
@@ -20,8 +20,8 @@
       </div>
     </main>
     <script>
-      document.querySelector('#homepage').href = document.location.href
-      document.querySelector('#about').href = document.location.href
+      document.querySelector('#homepage').href = document.location.href;
+      document.querySelector('#about').href = document.location.href;
     </script>
   </body>
 </html>

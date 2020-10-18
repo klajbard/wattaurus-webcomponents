@@ -2530,7 +2530,7 @@ class LinkIcon extends LitElement {
   constructor() {
     super();
     this.href = '';
-    this.name = '';
+    this.title = '';
     this.external = false;
   }
 
@@ -2538,8 +2538,8 @@ class LinkIcon extends LitElement {
     return {
       external: { type: Boolean },
       href: { type: String },
-      name: { type: String },
-    }
+      title: { type: String },
+    };
   }
 
   static get styles() {
@@ -2598,25 +2598,25 @@ class LinkIcon extends LitElement {
         transition: width 0.05s ease 0.1s, height 0.05s ease 0.15s, visibility 0s 0.1s;
       }
       ::slotted(svg) {
-        height: 3rem;
-        width: 3rem;
+        height: var(--wui-link-icon-svg-size, 3rem);
+        width: var(--wui-link-icon-svg-size, 3rem);
       }
-    `
+    `;
   }
 
   firstUpdated() {
     const element = this.shadowRoot.querySelector('a');
     if (!this.external) element.removeAttribute('rel');
     if (!this.href) element.removeAttribute('href');
-    if (!this.name) element.removeAttribute('name');
+    if (!this.title) element.removeAttribute('title');
   }
 
   render() {
     return html`
-      <a class="link" href=${this.href} rel="noopener noreferrer" name=${this.name}>
+      <a class="link" href=${this.href} rel="noopener noreferrer" title=${this.title}>
         <slot></slot>
       </a>
-    `
+    `;
   }
 }
 
@@ -7826,7 +7826,6 @@ const classMap = directive((classInfo) => (part) => {
 class Button extends LitElement$2 {
   constructor() {
     super();
-    this.active = false;
     this.onclick;
     this.outline = false;
     this.resetPadding = false;
@@ -7839,7 +7838,7 @@ class Button extends LitElement$2 {
       outline: { type: Boolean },
       resetPadding: { type: Boolean },
       transparent: { type: Boolean },
-    }
+    };
   }
 
   static get styles() {
@@ -7915,16 +7914,16 @@ class Button extends LitElement$2 {
         width: 1em;
         margin-right: 0.5em;
       }
-    `
+    `;
   }
 
   _handleMouseDown(event) {
     const button = this.shadowRoot.querySelector('#button');
     const { offsetX, offsetY } = event;
     const { width, height } = button.getBoundingClientRect();
-    this.active = true;
+    button.classList.add('active');
     setTimeout(() => {
-      this.active = false;
+      button.classList.remove('active');
     }, 500);
     button.style.setProperty('--top', `${(offsetY / height) * 100}%`);
     button.style.setProperty('--left', `${(offsetX / width) * 100}%`);
@@ -7939,14 +7938,13 @@ class Button extends LitElement$2 {
       'wui-button--transparent': this.transparent,
       'wui-button--no-padding': this.resetPadding,
       'wui-button--outline': this.outline,
-      active: this.active,
     });
     return html$2`
       <button id="button" class="wui-button ${classNames}" @onclick=${this.onclick} @mousedown=${this._handleMouseDown}>
         <span class="icon-container"><slot name="icon"></slot></span>
         <span><slot></slot></span>
       </button>
-    `
+    `;
   }
 }
 
@@ -7955,13 +7953,15 @@ window && window.customElements && window.customElements.define('wui-button', Bu
 class Header extends LitElement$1 {
   constructor() {
     super();
+    this.component = '';
     this.showBack;
   }
 
   static get properties() {
     return {
+      component: { type: String },
       showBack: { type: Boolean },
-    }
+    };
   }
 
   static get styles() {
@@ -7973,6 +7973,8 @@ class Header extends LitElement$1 {
         background-color: #003f42;
         color: #fff;
         padding: 0.5rem 2rem;
+        justify-content: space-between;
+        align-items: center;
       }
       .content {
         display: flex;
@@ -7988,7 +7990,7 @@ class Header extends LitElement$1 {
         font-weight: bold;
         font-size: 1.5rem;
       }
-    `
+    `;
   }
 
   _handleClick() {
@@ -8001,19 +8003,34 @@ class Header extends LitElement$1 {
         <wui-button @click=${this._handleClick} outline transparent style=${'--wui-button-main-color: #00d1db'}>
           <span class="button-content">&lArr;</span>
         </wui-button>
-      `
+      `;
     }
   }
 
   render() {
+    const folder = this.component[this.component.length - 1] ? `/${this.component}` : '';
+    const link = `https://github.com/klajbard/wattaurus-webcomponents/blob/master/docs${folder}/index.html`;
     return html$1`
       <header>
         <div class="content">
           ${this._renderButton()}
           <h1 class="title"><slot></slot></h1>
         </div>
+        <wui-link-icon
+          href=${link}
+          title="Source code"
+          style="--wui-link-icon-svg-size: 1.5rem;--wui-link-icon-color: #fff"
+        >
+          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" height="32px" width="32px" viewBox="0 0 32 32">
+            <title>github</title>
+            <path
+              fill="currentColor"
+              d="M16 0.395c-8.836 0-16 7.163-16 16 0 7.069 4.585 13.067 10.942 15.182 0.8 0.148 1.094-0.347 1.094-0.77 0-0.381-0.015-1.642-0.022-2.979-4.452 0.968-5.391-1.888-5.391-1.888-0.728-1.849-1.776-2.341-1.776-2.341-1.452-0.993 0.11-0.973 0.11-0.973 1.606 0.113 2.452 1.649 2.452 1.649 1.427 2.446 3.743 1.739 4.656 1.33 0.143-1.034 0.558-1.74 1.016-2.14-3.554-0.404-7.29-1.777-7.29-7.907 0-1.747 0.625-3.174 1.649-4.295-0.166-0.403-0.714-2.030 0.155-4.234 0 0 1.344-0.43 4.401 1.64 1.276-0.355 2.645-0.532 4.005-0.539 1.359 0.006 2.729 0.184 4.008 0.539 3.054-2.070 4.395-1.64 4.395-1.64 0.871 2.204 0.323 3.831 0.157 4.234 1.026 1.12 1.647 2.548 1.647 4.295 0 6.145-3.743 7.498-7.306 7.895 0.574 0.497 1.085 1.47 1.085 2.963 0 2.141-0.019 3.864-0.019 4.391 0 0.426 0.288 0.925 1.099 0.768 6.354-2.118 10.933-8.113 10.933-15.18 0-8.837-7.164-16-16-16z"
+            ></path>
+          </svg>
+        </wui-link-icon>
       </header>
-    `
+    `;
   }
 }
 
