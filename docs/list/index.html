@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="./index.bundle.js"></script>
+    <link rel="stylesheet" href="../main.css" />
+    <title>WUI - List</title>
+  </head>
+  <body>
+    <wui-header showBack component="list">List</wui-header>
+    <main class="container">
+      <div class="section">
+        <h3>Standard list</h3>
+        <wui-list>
+          <wui-list-elem>Elem 1</wui-list-elem>
+          <wui-list-elem>Elem 2</wui-list-elem>
+          <wui-list-elem>Elem 3</wui-list-elem>
+        </wui-list>
+        <h3>List with custom marker for all</h3>
+        <wui-list style="--wui-list-elem-icon: '🐧';">
+          <wui-list-elem>Elem 1</wui-list-elem>
+          <wui-list-elem>Elem 2</wui-list-elem>
+          <wui-list-elem>Elem 3</wui-list-elem>
+        </wui-list>
+        <p><strong>&lt;wui-list style="--wui-list-elem-icon: '🐧';"></strong></p>
+        <h3>List with unique marker for each</h3>
+        <wui-list>
+          <wui-list-elem style="--wui-list-elem-icon: '🌲';">Elem 1</wui-list-elem>
+          <wui-list-elem style="--wui-list-elem-icon: '🌳';">Elem 2</wui-list-elem>
+          <wui-list-elem style="--wui-list-elem-icon: '🌱';">Elem 3</wui-list-elem>
+        </wui-list>
+        <p><strong>&lt;wui-list-elem style="--wui-list-elem-icon: '🌲';"></strong></p>
+        <p><strong>&lt;wui-list-elem style="--wui-list-elem-icon: '🌳';"></strong></p>
+        <p><strong>&lt;wui-list-elem style="--wui-list-elem-icon: '🌱';"></strong></p>
+      </div>
+    </main>
+  </body>
+</html>

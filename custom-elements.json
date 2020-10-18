@@ -1,0 +1,293 @@
+{
+  "version": "experimental",
+  "tags": [
+    {
+      "name": "wui-button",
+      "path": "./dist/index.js",
+      "attributes": [
+        {
+          "name": "outline",
+          "type": "boolean"
+        },
+        {
+          "name": "resetPadding",
+          "type": "boolean"
+        },
+        {
+          "name": "transparent",
+          "type": "boolean"
+        }
+      ],
+      "properties": [
+        {
+          "name": "outline",
+          "attribute": "outline",
+          "type": "boolean"
+        },
+        {
+          "name": "resetPadding",
+          "attribute": "resetPadding",
+          "type": "boolean"
+        },
+        {
+          "name": "transparent",
+          "attribute": "transparent",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "wui-icon-link",
+      "path": "./dist/index.js",
+      "attributes": [
+        {
+          "name": "external",
+          "type": "boolean"
+        },
+        {
+          "name": "url",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "properties": [
+        {
+          "name": "external",
+          "attribute": "external",
+          "type": "boolean"
+        },
+        {
+          "name": "url",
+          "attribute": "url",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "attribute": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "wui-social-link",
+      "path": "./dist/index.js",
+      "attributes": [
+        {
+          "name": "url",
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        }
+      ],
+      "properties": [
+        {
+          "name": "url",
+          "attribute": "url",
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "attribute": "type",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "wui-button",
+      "path": "./src/Button/Button.js",
+      "attributes": [
+        {
+          "name": "outline",
+          "type": "boolean"
+        },
+        {
+          "name": "resetPadding",
+          "type": "boolean"
+        },
+        {
+          "name": "transparent",
+          "type": "boolean"
+        }
+      ],
+      "properties": [
+        {
+          "name": "outline",
+          "attribute": "outline",
+          "type": "boolean"
+        },
+        {
+          "name": "resetPadding",
+          "attribute": "resetPadding",
+          "type": "boolean"
+        },
+        {
+          "name": "transparent",
+          "attribute": "transparent",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "wui-icon-link",
+      "path": "./src/IconLink/IconLink.js",
+      "attributes": [
+        {
+          "name": "external",
+          "type": "boolean"
+        },
+        {
+          "name": "url",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "properties": [
+        {
+          "name": "external",
+          "attribute": "external",
+          "type": "boolean"
+        },
+        {
+          "name": "url",
+          "attribute": "url",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "attribute": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "wui-social-link",
+      "path": "./src/SocialLink/SocialLink.js",
+      "attributes": [
+        {
+          "name": "url",
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        }
+      ],
+      "properties": [
+        {
+          "name": "url",
+          "attribute": "url",
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "attribute": "type",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "wui-button",
+      "path": "./dist/components/Button.js",
+      "attributes": [
+        {
+          "name": "outline",
+          "type": "boolean"
+        },
+        {
+          "name": "resetPadding",
+          "type": "boolean"
+        },
+        {
+          "name": "transparent",
+          "type": "boolean"
+        }
+      ],
+      "properties": [
+        {
+          "name": "outline",
+          "attribute": "outline",
+          "type": "boolean"
+        },
+        {
+          "name": "resetPadding",
+          "attribute": "resetPadding",
+          "type": "boolean"
+        },
+        {
+          "name": "transparent",
+          "attribute": "transparent",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "wui-icon-link",
+      "path": "./dist/components/IconLink.js",
+      "attributes": [
+        {
+          "name": "external",
+          "type": "boolean"
+        },
+        {
+          "name": "url",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "properties": [
+        {
+          "name": "external",
+          "attribute": "external",
+          "type": "boolean"
+        },
+        {
+          "name": "url",
+          "attribute": "url",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "attribute": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "wui-social-link",
+      "path": "./dist/components/SocialLink.js",
+      "attributes": [
+        {
+          "name": "url",
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        }
+      ],
+      "properties": [
+        {
+          "name": "url",
+          "attribute": "url",
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "attribute": "type",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+import { List } from './list';
+import { fixture, html } from '@open-wc/testing';
+
+const assert = chai.assert;
+
+suite('wui-list', () => {
+  test('is defined', () => {
+    const el = document.createElement('wui-list');
+    assert.instanceOf(el, List);
+  });
+
+  test('renders with default value', async () => {
+    const el = await fixture(html`<wui-list></wui-list>`);
+    assert.shadowDom.equal(
+      el,
+      `<ul id="list">
+        <slot></slot>
+      </ul>
+    `
+    );
+  });
+});

@@ -1,0 +1,32 @@
+{
+  "name": "@wui/list-elem",
+  "version": "0.0.1",
+  "description": "List element component of WUI library",
+  "keywords": [
+    "list-elem",
+    "web components",
+    "wui"
+  ],
+  "main": "dist/list-elem.js",
+  "module": "dist/list-elem.js",
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "lit-element": "^2.3.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/klajbard/wattaurus-webcomponents.git",
+    "directory": "packages/list-elem"
+  },
+  "bugs": {
+    "url": "https://github.com/klajbard/wattaurus-webcomponents/issues"
+  },
+  "author": "klajbar <klajbard@gmail.com>",
+  "homepage": "https://github.com/klajbard/wattaurus-webcomponents#readme"
+}

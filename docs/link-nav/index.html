@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="./index.bundle.js"></script>
+    <link rel="stylesheet" href="../main.css" />
+    <title>WUI - Navigation Link</title>
+  </head>
+  <body>
+    <wui-header showBack component="link-nav">Navigation Link</wui-header>
+    <main class="container">
+      <div class="section">
+        <h3>Standard nav link</h3>
+        <wui-link-nav id="homepage">Homepage</wui-link-nav>
+        <h3>Link with title</h3>
+        <wui-link-nav title="About" id="about">About</wui-link-nav>
+        <h3>Link without href</h3>
+        <wui-link-nav>No href</wui-link-nav>
+      </div>
+    </main>
+    <script>
+      document.querySelector('#homepage').href = document.location.href;
+      document.querySelector('#about').href = document.location.href;
+    </script>
+  </body>
+</html>
