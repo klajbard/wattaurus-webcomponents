@@ -5219,7 +5219,11 @@ class Button extends LitElement$1 {
 
   static get styles() {
     return css$1`
-      .wui-button {
+      :host {
+        display: inline-flex;
+        vertical-align: top;
+      }
+      .button {
         background: var(--wui-button-main-color, #00888e);
         color: var(--wui-button-secondary-color, #fff);
         border: none;
@@ -5235,7 +5239,7 @@ class Button extends LitElement$1 {
         transition: opacity 0.3s ease-in;
         vertical-align: middle;
       }
-      .wui-button:before {
+      .button:before {
         content: '';
         position: absolute;
         top: 0;
@@ -5245,13 +5249,13 @@ class Button extends LitElement$1 {
         background-color: var(--wui-button-shadow-color, #00888e);
         opacity: 0;
       }
-      .wui-button:hover:before {
+      .button:hover:before {
         opacity: 0.1;
       }
-      .wui-button:focus::before {
+      .button:focus::before {
         opacity: 0.3;
       }
-      .wui-button:after {
+      .button:after {
         content: '';
         position: absolute;
         top: var(--top);
@@ -5264,20 +5268,20 @@ class Button extends LitElement$1 {
         opacity: 0.3;
         border-radius: inherit;
       }
-      .wui-button.active:after {
+      .button.active:after {
         clip-path: circle(100%);
         opacity: 0;
         transition: clip-path 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 0.4s ease-out;
         transition-delay: -0.1s, 0.25s;
       }
-      .wui-button--transparent {
+      .transparent {
         background-color: transparent;
         color: var(--wui-button-main-color, #00888e);
       }
-      .wui-button--no-padding {
+      .no-padding {
         padding: 0;
       }
-      .wui-button--outline {
+      .outline {
         color: var(--wui-button-main-color, #00888e);
         box-shadow: inset 0 0 0 1px var(--wui-button-main-color, #00888e);
         background: var(--wui-button-secondary-color, transparent);
@@ -5311,12 +5315,12 @@ class Button extends LitElement$1 {
 
   render() {
     const classNames = classMap({
-      'wui-button--transparent': this.transparent,
-      'wui-button--no-padding': this.resetPadding,
-      'wui-button--outline': this.outline,
+      transparent: this.transparent,
+      'no-padding': this.resetPadding,
+      outline: this.outline,
     });
     return html$1`
-      <button id="button" class="wui-button ${classNames}" @onclick=${this.onclick} @mousedown=${this._handleMouseDown}>
+      <button id="button" class="button ${classNames}" @onclick=${this.onclick} @mousedown=${this._handleMouseDown}>
         <span class="icon-container"><slot name="icon"></slot></span>
         <span><slot></slot></span>
       </button>
@@ -7872,6 +7876,9 @@ class LinkIcon extends LitElement$2 {
 
   static get styles() {
     return css$2`
+      :host {
+        display: inline-flex;
+      }
       .link {
         position: relative;
         display: inline-flex;
@@ -10567,23 +10574,68 @@ LitElement$3.render = render$1$3;
 class List extends LitElement$3 {
   constructor() {
     super();
+    this.list = [];
+    this.plain;
+    this.selectedIndex = -1;
   }
 
   static get properties() {
-    return {};
+    return {
+      plain: {type: Boolean},
+    };
   }
 
   static get styles() {
-    return css$3``;
+    return css$3`
+      :host {
+        display: flex;
+      }
+      .list {
+        width: 100%;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+    `;
   }
 
   firstUpdated() {
-    const element = this.shadowRoot.querySelector('ul');
+    this.list = this.shadowRoot
+      .querySelector('slot')
+      .assignedNodes({ flatten: true })
+      .reduce((acc, node) => {
+        node.plain = (this.plain && node.plain === undefined) || node.plain;
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          acc.push(node);
+        }
+        return acc;
+      }, []);
+  }
+
+  handleSelection() {
+    for (const listElem of this.list) {
+      if (listElem.hasAttribute('wui-list-elem')) {
+        listElem.selected = this.list.indexOf(listElem) === this.selectedIndex;
+      }
+    }
+  }
+
+  handleSelected(event) {
+    const elements = event.composedPath();
+    let index = -1;
+    for (const elem of elements) {
+      if (elem.nodeType === Node.ELEMENT_NODE && elem.hasAttribute('wui-list-elem')) {
+        index = this.list.indexOf(elem);
+      }
+    }
+    this.selectedIndex = index;
+
+    this.handleSelection();
   }
 
   render() {
     return html$3`
-      <ul id="list">
+      <ul id="list" class="list" @selected-request=${this.handleSelected}>
         <slot></slot>
       </ul>
     `;
@@ -13123,32 +13175,132 @@ LitElement$4.render = render$1$4;
 class ListElem extends LitElement$4 {
   constructor() {
     super();
-    this.entity;
+    this.logo;
+    this.plain;
+    this.selected;
   }
 
   static get properties() {
     return {
-      entity: { type: String },
+      logo: {type: Boolean},
+      plain: { type: Boolean, reflect: true },
+      selected: { type: Boolean, reflect: true },
     };
   }
 
   static get styles() {
     return css$4`
-      .list-elem {
-        display: block;
+      :host {
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: flex-start;
+        overflow: hidden;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        padding-left: var(--wui-list-elem-side-padding, 1.5rem);
+        padding-right: var(--wui-list-elem-side-padding, 1.5rem);
+        outline: none;
+        height: 3rem;
+        cursor: default;
+        color: var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, 0.87));
       }
-      .list-elem::before {
-        content: var(--wui-list-elem-icon, '➡');
-        margin-left: -1.5em;
-        margin-right: 0.5em;
+      :host([wui-list-elem]){
+        cursor: pointer;
+      }
+      :host([wui-list-elem]:hover){
+        background-color: rgba(230,230,230, .7);
+      }
+      :host([selected]) {
+        background-color: rgba(222,222,222, .7);
+      }
+      .content {
+        display: flex;
+        flex-direction: column;
+      }
+      slot + slot {
+        font-size: .75rem;
+      }
+      .list-elem {
+        display: flex;
+        align-items: center;
+      }
+      .icon {
+        margin-right: 0.5rem;
+      }
+      .icon ::slotted(svg){
+        height: 1.5rem;
+        width: 1.5rem;
       }
     `;
+  }
+
+  handleClick() {
+    this.fireSelectedRequest(this.selected, 'interaction');
+  }
+
+  fireSelectedRequest(selected, source) {
+    if (this.plain) {
+      return;
+    }
+
+    const customEv = new CustomEvent('selected-request', {
+      bubbles: true,
+      composed: true,
+      detail: { source, selected },
+    });
+
+    this.dispatchEvent(customEv);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    if (!this.plain) {
+      this.setAttribute('wui-list-elem', '');
+    }
+    this.addEventListener('click', this.handleClick, { passive: true });
+  }
+
+  plainChanged() {
+    if (this.plain) {
+      this.removeAttribute('wui-list-elem');
+      this.selected = false;
+    } else {
+      this.setAttribute('wui-list-elem', '');
+    }
+  }
+
+  updated(changedProperties) {
+    changedProperties.forEach((_, propName) => {
+      if (propName === "plain") this.plainChanged();
+    });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('click', this.handleClick);
+  }
+
+  renderIcon() {
+    if (this.logo) {
+      return html$4`
+        <span class="icon">
+          <slot name="icon"></slot>
+        </span>
+      `
+    } else {
+      return html$4``;
+    }
   }
 
   render() {
     return html$4`
       <li class="list-elem">
-        <slot></slot>
+        ${this.renderIcon()}
+        <span class="content">
+          <slot></slot>
+          <slot name="sub"></slot>
+        </span>
       </li>
     `;
   }

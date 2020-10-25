@@ -2542,6 +2542,9 @@ class LinkNav extends LitElement {
 
   static get styles() {
     return css`
+      :host {
+        display: inline-flex;
+      }
       .link {
         cursor: pointer;
         position: relative;
@@ -7809,7 +7812,11 @@ class Button extends LitElement$2 {
 
   static get styles() {
     return css$2`
-      .wui-button {
+      :host {
+        display: inline-flex;
+        vertical-align: top;
+      }
+      .button {
         background: var(--wui-button-main-color, #00888e);
         color: var(--wui-button-secondary-color, #fff);
         border: none;
@@ -7825,7 +7832,7 @@ class Button extends LitElement$2 {
         transition: opacity 0.3s ease-in;
         vertical-align: middle;
       }
-      .wui-button:before {
+      .button:before {
         content: '';
         position: absolute;
         top: 0;
@@ -7835,13 +7842,13 @@ class Button extends LitElement$2 {
         background-color: var(--wui-button-shadow-color, #00888e);
         opacity: 0;
       }
-      .wui-button:hover:before {
+      .button:hover:before {
         opacity: 0.1;
       }
-      .wui-button:focus::before {
+      .button:focus::before {
         opacity: 0.3;
       }
-      .wui-button:after {
+      .button:after {
         content: '';
         position: absolute;
         top: var(--top);
@@ -7854,20 +7861,20 @@ class Button extends LitElement$2 {
         opacity: 0.3;
         border-radius: inherit;
       }
-      .wui-button.active:after {
+      .button.active:after {
         clip-path: circle(100%);
         opacity: 0;
         transition: clip-path 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 0.4s ease-out;
         transition-delay: -0.1s, 0.25s;
       }
-      .wui-button--transparent {
+      .transparent {
         background-color: transparent;
         color: var(--wui-button-main-color, #00888e);
       }
-      .wui-button--no-padding {
+      .no-padding {
         padding: 0;
       }
-      .wui-button--outline {
+      .outline {
         color: var(--wui-button-main-color, #00888e);
         box-shadow: inset 0 0 0 1px var(--wui-button-main-color, #00888e);
         background: var(--wui-button-secondary-color, transparent);
@@ -7901,12 +7908,12 @@ class Button extends LitElement$2 {
 
   render() {
     const classNames = classMap({
-      'wui-button--transparent': this.transparent,
-      'wui-button--no-padding': this.resetPadding,
-      'wui-button--outline': this.outline,
+      transparent: this.transparent,
+      'no-padding': this.resetPadding,
+      outline: this.outline,
     });
     return html$2`
-      <button id="button" class="wui-button ${classNames}" @onclick=${this.onclick} @mousedown=${this._handleMouseDown}>
+      <button id="button" class="button ${classNames}" @onclick=${this.onclick} @mousedown=${this._handleMouseDown}>
         <span class="icon-container"><slot name="icon"></slot></span>
         <span><slot></slot></span>
       </button>
@@ -10462,6 +10469,9 @@ class LinkIcon extends LitElement$3 {
 
   static get styles() {
     return css$3`
+      :host {
+        display: inline-flex;
+      }
       .link {
         position: relative;
         display: inline-flex;
