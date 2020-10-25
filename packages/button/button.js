@@ -1,21 +1,16 @@
 import { LitElement, html, css } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
 
 export class Button extends LitElement {
   constructor() {
     super();
-    this.onclick;
     this.outline = false;
-    this.resetPadding = false;
     this.transparent = false;
   }
 
   static get properties() {
     return {
-      onclick: { attribute: false },
-      outline: { type: Boolean },
-      resetPadding: { type: Boolean },
-      transparent: { type: Boolean },
+      outline: { type: Boolean, reflect: true },
+      transparent: { type: Boolean, reflect: true },
     };
   }
 
@@ -70,20 +65,17 @@ export class Button extends LitElement {
         opacity: 0.3;
         border-radius: inherit;
       }
-      .button.active:after {
+      .active:after {
         clip-path: circle(100%);
         opacity: 0;
         transition: clip-path 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 0.4s ease-out;
         transition-delay: -0.1s, 0.25s;
       }
-      .transparent {
+      :host([transparent]) .button {
         background-color: transparent;
         color: var(--wui-button-main-color, #00888e);
       }
-      .no-padding {
-        padding: 0;
-      }
-      .outline {
+      :host([outline]) .button {
         color: var(--wui-button-main-color, #00888e);
         box-shadow: inset 0 0 0 1px var(--wui-button-main-color, #00888e);
         background: var(--wui-button-secondary-color, transparent);
@@ -116,13 +108,8 @@ export class Button extends LitElement {
   }
 
   render() {
-    const classNames = classMap({
-      transparent: this.transparent,
-      'no-padding': this.resetPadding,
-      outline: this.outline,
-    });
     return html`
-      <button id="button" class="button ${classNames}" @onclick=${this.onclick} @mousedown=${this._handleMouseDown}>
+      <button id="button" class="button" @mousedown=${this._handleMouseDown}>
         <span class="icon-container"><slot name="icon"></slot></span>
         <span><slot></slot></span>
       </button>
