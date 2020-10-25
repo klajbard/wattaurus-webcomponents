@@ -16,6 +16,9 @@ export class LinkSocial extends LitElement {
 
   static get styles() {
     return css`
+      :host {
+        display: inline-flex;
+      }
       .social-item {
         display: inline-flex;
         align-items: center;

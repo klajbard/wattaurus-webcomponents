@@ -18,7 +18,7 @@ suite('wui-button', () => {
     assert.shadowDom.equal(
       el,
       `
-      <button id="button" class="wui-button">
+      <button id="button" class="button">
         <span class="icon-container"><slot name="icon"></slot></span>
         <span><slot></slot></span>
       </button>
@@ -32,7 +32,7 @@ suite('wui-button', () => {
     assert.shadowDom.equal(
       el,
       `
-      <button id="button" class="wui-button wui-button--transparent" >
+      <button id="button" class="button transparent" >
         <span class="icon-container"><slot name="icon"></slot></span>
         <span><slot></slot></span>
       </button>
@@ -46,7 +46,7 @@ suite('wui-button', () => {
     assert.shadowDom.equal(
       el,
       `
-      <button id="button" class="wui-button wui-button--no-padding" >
+      <button id="button" class="button no-padding" >
         <span class="icon-container"><slot name="icon"></slot></span>
         <span><slot></slot></span>
       </button>
@@ -60,7 +60,7 @@ suite('wui-button', () => {
     assert.shadowDom.equal(
       el,
       `
-      <button id="button" class="wui-button wui-button--outline" >
+      <button id="button" class="button outline" >
         <span class="icon-container"><slot name="icon"></slot></span>
         <span><slot></slot></span>
       </button>
@@ -70,7 +70,8 @@ suite('wui-button', () => {
 
   test('click on button', async () => {
     const el = await fixture(html`<wui-button>Button</wui-button>`);
-    el.shadowRoot.querySelector('button').dispatchEvent(new Event('mousedown'));
-    assert.equal(el.active, true);
+    const button = el.shadowRoot.querySelector('button');
+    button.dispatchEvent(new Event('mousedown'));
+    assert.equal(button.classList.contains('active'), true);
   });
 });

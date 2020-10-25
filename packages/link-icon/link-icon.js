@@ -18,6 +18,9 @@ export class LinkIcon extends LitElement {
 
   static get styles() {
     return css`
+      :host {
+        display: inline-flex;
+      }
       .link {
         position: relative;
         display: inline-flex;

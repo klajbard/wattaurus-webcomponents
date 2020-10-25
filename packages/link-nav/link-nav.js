@@ -16,6 +16,9 @@ export class LinkNav extends LitElement {
 
   static get styles() {
     return css`
+      :host {
+        display: inline-flex;
+      }
       .link {
         cursor: pointer;
         position: relative;

@@ -13,10 +13,15 @@ suite('wui-list', () => {
     const el = await fixture(html`<wui-list></wui-list>`);
     assert.shadowDom.equal(
       el,
-      `<ul id="list">
+      `<ul class="list" id="list">
         <slot></slot>
       </ul>
     `
     );
+  });
+
+  test('renders with no interaction', async () => {
+    const el = await fixture(html`<wui-list plain></wui-list>`);
+    assert.equal(el.plain, true);
   });
 });
