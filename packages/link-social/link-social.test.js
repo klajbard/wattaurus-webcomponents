@@ -18,7 +18,7 @@ suite('wui-link-social', () => {
           <slot name="icon"></slot>
         </div>
         <a
-          class="link custom"
+          class="link"
           target="_blank"
           rel="noopener noreferrer"
         >

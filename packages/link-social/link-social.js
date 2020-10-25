@@ -58,6 +58,13 @@ export class LinkSocial extends LitElement {
         text-decoration: none;
         line-height: 2rem;
         outline: none;
+        background: var(--wui-link-social-icon-background, #000);
+      }
+      :host([type=facebook]) .link {
+        background-color: #3b5998;
+      }
+      :host([type=instagram]) .link {
+        background: radial-gradient(circle at 5% 170%, #515bd4 5%, #8134af 25%, #dd2a7b 55%, #b19853 80%, #f58529 95%);
       }
       .link:link:before {
         content: '';
@@ -74,15 +81,6 @@ export class LinkSocial extends LitElement {
       }
       .link:link:focus::before {
         opacity: 0.2;
-      }
-      .facebook {
-        background-color: #3b5998;
-      }
-      .instagram {
-        background: radial-gradient(circle at 5% 170%, #515bd4 5%, #8134af 25%, #dd2a7b 55%, #b19853 80%, #f58529 95%);
-      }
-      .custom {
-        background: var(--wui-link-social-icon-background, #000);
       }
     `;
   }
@@ -121,16 +119,12 @@ export class LinkSocial extends LitElement {
     `;
     const customIcon = html`<slot name="icon"></slot>`;
     const icon = this.type === 'instagram' ? svgInsta : this.type === 'facebook' ? svgFacebook : customIcon;
-    const classNames = [
-      'link',
-      this.type === 'instagram' ? 'instagram' : this.type === 'facebook' ? 'facebook' : 'custom',
-    ].join(' ');
     return html`
       <div class="social-item">
         <div class="icon-container">
           ${icon}
         </div>
-        <a class=${classNames} href=${this.url} target="_blank" rel="noopener noreferrer">
+        <a class="link" href=${this.url} target="_blank" rel="noopener noreferrer">
           <span class="link-container">
             <slot></slot>
           </span>
