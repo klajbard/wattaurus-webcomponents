@@ -14,7 +14,12 @@ suite('wui-list-elem', () => {
     assert.shadowDom.equal(
       el,
       `<li class="list-elem">
-        <slot></slot>
+        <span class="content">
+          <slot>
+          </slot>
+          <slot name="sub">
+          </slot>
+        </span>
       </li>
     `
     );

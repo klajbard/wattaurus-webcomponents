@@ -10,7 +10,7 @@ export class ListElem extends LitElement {
 
   static get properties() {
     return {
-      logo: {type: Boolean},
+      logo: { type: Boolean },
       plain: { type: Boolean, reflect: true },
       selected: { type: Boolean, reflect: true },
     };
@@ -33,21 +33,21 @@ export class ListElem extends LitElement {
         cursor: default;
         color: var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, 0.87));
       }
-      :host([wui-list-elem]){
+      :host([wui-list-elem]) {
         cursor: pointer;
       }
-      :host([wui-list-elem]:hover){
-        background-color: rgba(230,230,230, .7);
+      :host([wui-list-elem]:hover) {
+        background-color: rgba(230, 230, 230, 0.7);
       }
       :host([selected]) {
-        background-color: rgba(222,222,222, .7);
+        background-color: rgba(222, 222, 222, 0.7);
       }
       .content {
         display: flex;
         flex-direction: column;
       }
       slot + slot {
-        font-size: .75rem;
+        font-size: 0.75rem;
       }
       .list-elem {
         display: flex;
@@ -56,7 +56,7 @@ export class ListElem extends LitElement {
       .icon {
         margin-right: 0.5rem;
       }
-      .icon ::slotted(svg){
+      .icon ::slotted(svg) {
         height: 1.5rem;
         width: 1.5rem;
       }
@@ -92,7 +92,7 @@ export class ListElem extends LitElement {
   plainChanged() {
     if (this.plain) {
       this.removeAttribute('wui-list-elem');
-      this.selected = false
+      this.selected = false;
     } else {
       this.setAttribute('wui-list-elem', '');
     }
@@ -100,7 +100,7 @@ export class ListElem extends LitElement {
 
   updated(changedProperties) {
     changedProperties.forEach((_, propName) => {
-      if (propName === "plain") this.plainChanged()
+      if (propName === 'plain') this.plainChanged();
     });
   }
 
@@ -115,7 +115,7 @@ export class ListElem extends LitElement {
         <span class="icon">
           <slot name="icon"></slot>
         </span>
-      `
+      `;
     } else {
       return html``;
     }

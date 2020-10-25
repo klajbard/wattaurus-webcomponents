@@ -10,7 +10,7 @@ export class List extends LitElement {
 
   static get properties() {
     return {
-      plain: {type: Boolean},
+      plain: { type: Boolean },
     };
   }
 
@@ -33,9 +33,9 @@ export class List extends LitElement {
       .querySelector('slot')
       .assignedNodes({ flatten: true })
       .reduce((acc, node) => {
-        node.plain = (this.plain && node.plain === undefined) || node.plain
+        node.plain = (this.plain && node.plain === undefined) || node.plain;
         if (node.nodeType === Node.ELEMENT_NODE) {
-          acc.push(node)
+          acc.push(node);
         }
         return acc;
       }, []);
