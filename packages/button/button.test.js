@@ -12,8 +12,9 @@ suite('wui-button', () => {
   test('renders with default value', async () => {
     const el = await fixture(html`<wui-button>Button</wui-button>`);
     assert.equal(el.textContent, 'Button');
-    assert.equal(el.outline, false);
-    assert.equal(el.transparent, false);
+    assert.equal(el.outline, undefined);
+    assert.equal(el.transparent, undefined);
+    assert.equal(el.disabled, undefined)
     assert.shadowDom.equal(
       el,
       `
@@ -46,6 +47,20 @@ suite('wui-button', () => {
       el,
       `
       <button id="button" class="button" >
+        <span class="icon-container"><slot name="icon"></slot></span>
+        <span><slot></slot></span>
+      </button>
+    `
+    );
+  });
+
+  test('renders with disabled state', async () => {
+    const el = await fixture(html`<wui-button disabled></wui-button>`);
+    assert.equal(el.disabled, true);
+    assert.shadowDom.equal(
+      el,
+      `
+      <button id="button" class="button" tabindex="-1">
         <span class="icon-container"><slot name="icon"></slot></span>
         <span><slot></slot></span>
       </button>

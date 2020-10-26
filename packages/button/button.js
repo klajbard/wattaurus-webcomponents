@@ -3,12 +3,14 @@ import { LitElement, html, css } from 'lit-element';
 export class Button extends LitElement {
   constructor() {
     super();
-    this.outline = false;
-    this.transparent = false;
+    this.disabled;
+    this.outline;
+    this.transparent;
   }
 
   static get properties() {
     return {
+      disabled: { type: Boolean, reflect: true },
       outline: { type: Boolean, reflect: true },
       transparent: { type: Boolean, reflect: true },
     };
@@ -52,6 +54,13 @@ export class Button extends LitElement {
       .button:focus::before {
         opacity: 0.3;
       }
+      :host([disabled]) .button{
+        cursor: default;
+      }
+      :host([disabled]) .button::before,
+      :host([disabled]) .button::after{
+        display: none;
+      }
       .button:after {
         content: '';
         position: absolute;
@@ -80,6 +89,11 @@ export class Button extends LitElement {
         box-shadow: inset 0 0 0 1px var(--wui-button-main-color, #00888e);
         background: var(--wui-button-secondary-color, transparent);
       }
+      :host([disabled]) .button {
+        color: #7faa9f;
+        box-shadow: none;
+        background-color: #eaeaea;
+      }
       .icon-container {
         display: inline-flex;
       }
@@ -92,6 +106,7 @@ export class Button extends LitElement {
   }
 
   _handleMouseDown(event) {
+    if(this.disabled) return
     const button = this.shadowRoot.querySelector('#button');
     const { offsetX, offsetY } = event;
     const { width, height } = button.getBoundingClientRect();
@@ -105,6 +120,11 @@ export class Button extends LitElement {
     const dy = offsetY > height / 2 ? offsetY : height - offsetY;
     const size = Math.sqrt(dx ** 2 + dy ** 2) * 2;
     button.style.setProperty('--size', `${size}px`);
+  }
+
+  firstUpdated() {
+    const button = this.shadowRoot.querySelector("#button")
+    this.disabled && button.setAttribute("tabindex", "-1")
   }
 
   render() {
