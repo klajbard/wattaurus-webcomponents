@@ -13,7 +13,7 @@
     <main class="container">
       <div class="section">
         <h3>Standard Button</h3>
-        <wui-button data-attr="cica">
+        <wui-button>
           Standard Button
         </wui-button>
         <wui-button>
@@ -75,6 +75,16 @@
           </svg>
           Transparent
         </wui-button>
+        <h3>Disabled Button</h3>
+        <wui-button disabled>
+          Standard Button
+        </wui-button>
+        <wui-button disabled outline>
+          Outline Button
+        </wui-button>
+        <wui-button disabled transparent>
+          Transparent Button
+        </wui-button>
         <h3>Custom style Button</h3>
         <wui-button
           style="
@@ -112,7 +122,7 @@
         <p><strong>--wui-button-secondary-color: #000</strong></p>
         <p><strong>--wui-button-shadow-color: #11aa33</strong></p>
         <h3>Custom content button <small>(with no padding)</small></h3>
-        <wui-button transparent resetPadding>
+        <wui-button transparent style="--wui-button-padding: 0;">
           <div style="height: 10rem; width: 10rem; background: #ddd;"></div>
         </wui-button>
       </div>

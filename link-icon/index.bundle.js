@@ -5538,51 +5538,6 @@ function insertNodeIntoTemplate$2(template, node, refNode = null) {
  * http://polymer.github.io/PATENTS.txt
  */
 const directives$2 = new WeakMap();
-/**
- * Brands a function as a directive factory function so that lit-html will call
- * the function during template rendering, rather than passing as a value.
- *
- * A _directive_ is a function that takes a Part as an argument. It has the
- * signature: `(part: Part) => void`.
- *
- * A directive _factory_ is a function that takes arguments for data and
- * configuration and returns a directive. Users of directive usually refer to
- * the directive factory as the directive. For example, "The repeat directive".
- *
- * Usually a template author will invoke a directive factory in their template
- * with relevant arguments, which will then return a directive function.
- *
- * Here's an example of using the `repeat()` directive factory that takes an
- * array and a function to render an item:
- *
- * ```js
- * html`<ul><${repeat(items, (item) => html`<li>${item}</li>`)}</ul>`
- * ```
- *
- * When `repeat` is invoked, it returns a directive function that closes over
- * `items` and the template function. When the outer template is rendered, the
- * return directive function is called with the Part for the expression.
- * `repeat` then performs it's custom logic to render multiple items.
- *
- * @param f The directive factory function. Must be a function that returns a
- * function of the signature `(part: Part) => void`. The returned function will
- * be called with the part object.
- *
- * @example
- *
- * import {directive, html} from 'lit-html';
- *
- * const immutable = directive((v) => (part) => {
- *   if (part.value !== v) {
- *     part.setValue(v)
- *   }
- * });
- */
-const directive = (f) => ((...args) => {
-    const d = f(...args);
-    directives$2.set(d, true);
-    return d;
-});
 const isDirective$2 = (o) => {
     return typeof o === 'function' && directives$2.has(o);
 };
@@ -7726,121 +7681,19 @@ LitElement$2['finalized'] = true;
  */
 LitElement$2.render = render$1$1;
 
-/**
- * @license
- * Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at
- * http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at
- * http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at
- * http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at
- * http://polymer.github.io/PATENTS.txt
- */
-// IE11 doesn't support classList on SVG elements, so we emulate it with a Set
-class ClassList {
-    constructor(element) {
-        this.classes = new Set();
-        this.changed = false;
-        this.element = element;
-        const classList = (element.getAttribute('class') || '').split(/\s+/);
-        for (const cls of classList) {
-            this.classes.add(cls);
-        }
-    }
-    add(cls) {
-        this.classes.add(cls);
-        this.changed = true;
-    }
-    remove(cls) {
-        this.classes.delete(cls);
-        this.changed = true;
-    }
-    commit() {
-        if (this.changed) {
-            let classString = '';
-            this.classes.forEach((cls) => classString += cls + ' ');
-            this.element.setAttribute('class', classString);
-        }
-    }
-}
-/**
- * Stores the ClassInfo object applied to a given AttributePart.
- * Used to unset existing values when a new ClassInfo object is applied.
- */
-const previousClassesCache = new WeakMap();
-/**
- * A directive that applies CSS classes. This must be used in the `class`
- * attribute and must be the only part used in the attribute. It takes each
- * property in the `classInfo` argument and adds the property name to the
- * element's `class` if the property value is truthy; if the property value is
- * falsey, the property name is removed from the element's `class`. For example
- * `{foo: bar}` applies the class `foo` if the value of `bar` is truthy.
- * @param classInfo {ClassInfo}
- */
-const classMap = directive((classInfo) => (part) => {
-    if (!(part instanceof AttributePart$2) || (part instanceof PropertyPart$2) ||
-        part.committer.name !== 'class' || part.committer.parts.length > 1) {
-        throw new Error('The `classMap` directive must be used in the `class` attribute ' +
-            'and must be the only part in the attribute.');
-    }
-    const { committer } = part;
-    const { element } = committer;
-    let previousClasses = previousClassesCache.get(part);
-    if (previousClasses === undefined) {
-        // Write static classes once
-        // Use setAttribute() because className isn't a string on SVG elements
-        element.setAttribute('class', committer.strings.join(' '));
-        previousClassesCache.set(part, previousClasses = new Set());
-    }
-    const classList = (element.classList || new ClassList(element));
-    // Remove old classes that no longer apply
-    // We use forEach() instead of for-of so that re don't require down-level
-    // iteration.
-    previousClasses.forEach((name) => {
-        if (!(name in classInfo)) {
-            classList.remove(name);
-            previousClasses.delete(name);
-        }
-    });
-    // Add or remove classes based on their classMap value
-    for (const name in classInfo) {
-        const value = classInfo[name];
-        if (value != previousClasses.has(name)) {
-            // We explicitly want a loose truthy check of `value` because it seems
-            // more convenient that '' and 0 are skipped.
-            if (value) {
-                classList.add(name);
-                previousClasses.add(name);
-            }
-            else {
-                classList.remove(name);
-                previousClasses.delete(name);
-            }
-        }
-    }
-    if (typeof classList.commit === 'function') {
-        classList.commit();
-    }
-});
-
 class Button extends LitElement$2 {
   constructor() {
     super();
-    this.onclick;
-    this.outline = false;
-    this.resetPadding = false;
-    this.transparent = false;
+    this.disabled;
+    this.outline;
+    this.transparent;
   }
 
   static get properties() {
     return {
-      onclick: { attribute: false },
-      outline: { type: Boolean },
-      resetPadding: { type: Boolean },
-      transparent: { type: Boolean },
+      disabled: { type: Boolean, reflect: true },
+      outline: { type: Boolean, reflect: true },
+      transparent: { type: Boolean, reflect: true },
     };
   }
 
@@ -7882,6 +7735,13 @@ class Button extends LitElement$2 {
       .button:focus::before {
         opacity: 0.3;
       }
+      :host([disabled]) .button{
+        cursor: default;
+      }
+      :host([disabled]) .button::before,
+      :host([disabled]) .button::after{
+        display: none;
+      }
       .button:after {
         content: '';
         position: absolute;
@@ -7895,23 +7755,25 @@ class Button extends LitElement$2 {
         opacity: 0.3;
         border-radius: inherit;
       }
-      .button.active:after {
+      .active:after {
         clip-path: circle(100%);
         opacity: 0;
         transition: clip-path 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 0.4s ease-out;
         transition-delay: -0.1s, 0.25s;
       }
-      .transparent {
+      :host([transparent]) .button {
         background-color: transparent;
         color: var(--wui-button-main-color, #00888e);
       }
-      .no-padding {
-        padding: 0;
-      }
-      .outline {
+      :host([outline]) .button {
         color: var(--wui-button-main-color, #00888e);
         box-shadow: inset 0 0 0 1px var(--wui-button-main-color, #00888e);
         background: var(--wui-button-secondary-color, transparent);
+      }
+      :host([disabled]) .button {
+        color: #7faa9f;
+        box-shadow: none;
+        background-color: #eaeaea;
       }
       .icon-container {
         display: inline-flex;
@@ -7925,6 +7787,7 @@ class Button extends LitElement$2 {
   }
 
   _handleMouseDown(event) {
+    if(this.disabled) return
     const button = this.shadowRoot.querySelector('#button');
     const { offsetX, offsetY } = event;
     const { width, height } = button.getBoundingClientRect();
@@ -7940,14 +7803,14 @@ class Button extends LitElement$2 {
     button.style.setProperty('--size', `${size}px`);
   }
 
+  firstUpdated() {
+    const button = this.shadowRoot.querySelector("#button");
+    this.disabled && button.setAttribute("tabindex", "-1");
+  }
+
   render() {
-    const classNames = classMap({
-      transparent: this.transparent,
-      'no-padding': this.resetPadding,
-      outline: this.outline,
-    });
     return html$2`
-      <button id="button" class="button ${classNames}" @onclick=${this.onclick} @mousedown=${this._handleMouseDown}>
+      <button id="button" class="button" @mousedown=${this._handleMouseDown}>
         <span class="icon-container"><slot name="icon"></slot></span>
         <span><slot></slot></span>
       </button>
