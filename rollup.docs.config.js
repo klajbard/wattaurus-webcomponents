@@ -6,7 +6,8 @@ const components = [
   "link-icon/",
   "link-nav/",
   "link-social/",
-  "list/"
+  "list/",
+  "select/"
 ]
 
 const configs = components.reduce((acc, component) => {

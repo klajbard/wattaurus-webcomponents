@@ -36,7 +36,8 @@
     "@wui/link-nav": "file:packages/link-nav",
     "@wui/link-social": "file:packages/link-social",
     "@wui/list": "file:packages/list",
-    "@wui/list-elem": "file:packages/list-elem"
+    "@wui/list-elem": "file:packages/list-elem",
+    "@wui/select": "file:packages/select"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.12.1",

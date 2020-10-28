@@ -49,16 +49,28 @@ export class List extends LitElement {
     }
   }
 
+  notifyUpdate(triggerElem) {
+    const customEv = new CustomEvent('selected-update', {
+      bubbles: true,
+      composed: true,
+      detail: { source: triggerElem },
+    })
+
+    this.dispatchEvent(customEv)
+  }
+
   handleSelected(event) {
     const elements = event.composedPath();
-    let index = -1;
+    let index = -1, triggerElem = null;
     for (const elem of elements) {
       if (elem.nodeType === Node.ELEMENT_NODE && elem.hasAttribute('wui-list-elem')) {
         index = this.list.indexOf(elem);
+        triggerElem = elem
       }
     }
     this.selectedIndex = index;
 
+    this.notifyUpdate(triggerElem);
     this.handleSelection();
   }
 
