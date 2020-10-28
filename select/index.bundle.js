@@ -5380,7 +5380,7 @@ class Select extends LitElement {
       <button id="trigger" class="trigger ${triggerClass}" @click=${this._handleClick}>
         <span>${this.value}</span>
       </button>
-      <wui-list class="list ${triggerClass}" @selected-update=${this.handleUpdate}>
+      <wui-list class="list ${triggerClass}" @selected-update=${this._handleUpdate}>
         <slot></slot>
       </wui-list>
     </div>
