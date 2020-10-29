@@ -73,6 +73,17 @@ export class Select extends LitElement {
     `;
   }
 
+  _handleKeyDown(event) {
+    const list = this.shadowRoot.querySelector("wui-list")
+    if (list) {
+      list.dispatchEvent(new CustomEvent("request-keydown", {
+        bubbles: true,
+        composed: true,
+        detail: { key: event.key },
+      }))
+    }
+  }
+
   _handleClick() {
     const oldValue = this.open;
     this.open = !this.open;
@@ -82,7 +93,9 @@ export class Select extends LitElement {
   _handleUpdate(event) {
     const oldValue = this.value;
     this.value = event.detail.source.innerText;
-    this.open = false;
+    if (event.detail.triggerEvent === "click") {
+      this.open = false;
+    }
     this.requestUpdate('value', oldValue);
   }
 
@@ -96,7 +109,7 @@ export class Select extends LitElement {
     })
     return html`
     <div class="container">
-      <button id="trigger" class="trigger ${triggerClass}" @click=${this._handleClick}>
+      <button id="trigger" class="trigger ${triggerClass}" @keydown=${this._handleKeyDown} @click=${this._handleClick}>
         <span>${this.value}</span>
       </button>
       <wui-list class="list ${triggerClass}" @selected-update=${this._handleUpdate}>
