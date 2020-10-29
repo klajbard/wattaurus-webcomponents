@@ -5205,6 +5205,7 @@ class List extends LitElement$1 {
     this.list = [];
     this.plain;
     this.selectedIndex = -1;
+    this.addEventListener('request-keydown', this._handleKeyDown);
   }
 
   static get properties() {
@@ -5248,29 +5249,49 @@ class List extends LitElement$1 {
     }
   }
 
-  notifyUpdate(triggerElem) {
+  notifyUpdate(triggerElem, triggerEvent) {
     const customEv = new CustomEvent('selected-update', {
       bubbles: true,
       composed: true,
-      detail: { source: triggerElem },
+      detail: { source: triggerElem, triggerEvent },
     });
 
     this.dispatchEvent(customEv);
   }
 
+  selectItem(index, triggerEvent) {
+    const triggerElem = this.list[index];
+    this.selectedIndex = index;
+
+    this.notifyUpdate(triggerElem, triggerEvent);
+    this.handleSelection();
+  }
+
   handleSelected(event) {
     const elements = event.composedPath();
-    let index = -1, triggerElem = null;
+    let index = -1;
     for (const elem of elements) {
       if (elem.nodeType === Node.ELEMENT_NODE && elem.hasAttribute('wui-list-elem')) {
         index = this.list.indexOf(elem);
-        triggerElem = elem;
+        this.selectItem(index, "click");
+        break;
       }
     }
-    this.selectedIndex = index;
+  }
 
-    this.notifyUpdate(triggerElem);
-    this.handleSelection();
+  _handleKeyDown(event) {
+    switch (event.detail.key) {
+      case "ArrowDown":
+        if (this.selectedIndex < this.list.length - 1) {
+          this.selectItem(this.selectedIndex + 1, "keyDown");
+        }
+        break;
+      case "ArrowUp":
+        if (this.selectedIndex > 0) {
+          this.selectItem(this.selectedIndex - 1, "keyDown");
+        }
+        break;
+    }
   }
 
   render() {
@@ -5354,6 +5375,17 @@ class Select extends LitElement {
     `;
   }
 
+  _handleKeyDown(event) {
+    const list = this.shadowRoot.querySelector("wui-list");
+    if (list) {
+      list.dispatchEvent(new CustomEvent("request-keydown", {
+        bubbles: true,
+        composed: true,
+        detail: { key: event.key },
+      }));
+    }
+  }
+
   _handleClick() {
     const oldValue = this.open;
     this.open = !this.open;
@@ -5363,7 +5395,9 @@ class Select extends LitElement {
   _handleUpdate(event) {
     const oldValue = this.value;
     this.value = event.detail.source.innerText;
-    this.open = false;
+    if (event.detail.triggerEvent === "click") {
+      this.open = false;
+    }
     this.requestUpdate('value', oldValue);
   }
 
@@ -5377,7 +5411,7 @@ class Select extends LitElement {
     });
     return html`
     <div class="container">
-      <button id="trigger" class="trigger ${triggerClass}" @click=${this._handleClick}>
+      <button id="trigger" class="trigger ${triggerClass}" @keydown=${this._handleKeyDown} @click=${this._handleClick}>
         <span>${this.value}</span>
       </button>
       <wui-list class="list ${triggerClass}" @selected-update=${this._handleUpdate}>

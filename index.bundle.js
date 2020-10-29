@@ -13033,6 +13033,7 @@ class List extends LitElement$4 {
     this.list = [];
     this.plain;
     this.selectedIndex = -1;
+    this.addEventListener('request-keydown', this._handleKeyDown);
   }
 
   static get properties() {
@@ -13076,29 +13077,49 @@ class List extends LitElement$4 {
     }
   }
 
-  notifyUpdate(triggerElem) {
+  notifyUpdate(triggerElem, triggerEvent) {
     const customEv = new CustomEvent('selected-update', {
       bubbles: true,
       composed: true,
-      detail: { source: triggerElem },
+      detail: { source: triggerElem, triggerEvent },
     });
 
     this.dispatchEvent(customEv);
   }
 
+  selectItem(index, triggerEvent) {
+    const triggerElem = this.list[index];
+    this.selectedIndex = index;
+
+    this.notifyUpdate(triggerElem, triggerEvent);
+    this.handleSelection();
+  }
+
   handleSelected(event) {
     const elements = event.composedPath();
-    let index = -1, triggerElem = null;
+    let index = -1;
     for (const elem of elements) {
       if (elem.nodeType === Node.ELEMENT_NODE && elem.hasAttribute('wui-list-elem')) {
         index = this.list.indexOf(elem);
-        triggerElem = elem;
+        this.selectItem(index, "click");
+        break;
       }
     }
-    this.selectedIndex = index;
+  }
 
-    this.notifyUpdate(triggerElem);
-    this.handleSelection();
+  _handleKeyDown(event) {
+    switch (event.detail.key) {
+      case "ArrowDown":
+        if (this.selectedIndex < this.list.length - 1) {
+          this.selectItem(this.selectedIndex + 1, "keyDown");
+        }
+        break;
+      case "ArrowUp":
+        if (this.selectedIndex > 0) {
+          this.selectItem(this.selectedIndex - 1, "keyDown");
+        }
+        break;
+    }
   }
 
   render() {
